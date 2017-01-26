@@ -1,0 +1,10 @@
+
+*.zip
+*.h5
+train2014
+val2014
+*.py[cod]
+annotations
+*.dat
+.ipynb_checkpoints
+
