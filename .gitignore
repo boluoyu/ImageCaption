@@ -1,10 +1,12 @@
 
+*.py[cod]
 *.zip
 *.h5
+*.dat
+file_name_caption.bat
+file_name_images.bat
 train2014
 val2014
-*.py[cod]
 annotations
-*.dat
 .ipynb_checkpoints
 
