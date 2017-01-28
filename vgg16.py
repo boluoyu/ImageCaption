@@ -1,4 +1,9 @@
-# VGG16的实现，可以直接读取模型weights
+# coding: utf-8
+from __future__ import print_function
+
+"""
+VGG 16 model
+"""
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten

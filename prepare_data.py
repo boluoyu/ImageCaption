@@ -1,4 +1,5 @@
 # coding: utf-8
+from __future__ import print_function
 
 """
 Using VGG 16 pretrained model to generate COCO images' weights
@@ -104,5 +105,5 @@ if len(X) > 0:
         file_name_images[x[0]] = ret[index]
     X = []
 
-pickle.dump(file_name_images, open( "file_name_images.bat", "wb" ))
-pickle.dump(file_name_caption, open( "file_name_caption.bat", "wb" ))
+pickle.dump(file_name_images, open( "file_name_images.bat", "wb" ), protocol=2)
+pickle.dump(file_name_caption, open( "file_name_caption.bat", "wb" ), protocol=2)

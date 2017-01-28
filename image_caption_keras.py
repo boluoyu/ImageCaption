@@ -1,4 +1,5 @@
 # coding: utf-8
+from __future__ import print_function
 
 """
 Using keras to caption image
@@ -21,7 +22,7 @@ import numpy as np
 from tqdm import tqdm
 from keras.models import Sequential
 from keras.layers import Embedding, GRU, LSTM, TimeDistributed, RepeatVector, Merge
-from keras.layers import Dense, Activation
+from keras.layers import Dense, Activation, Dropout
 from keras.optimizers import Nadam
 from sklearn.utils import shuffle
 
@@ -74,13 +75,17 @@ pickle.dump({
     'index_word': index_word,
     'max_len': max_len,
     'vocabulary_size': vocabulary_size,
-    'vocabulary': vocabulary
-}, open('argument.dat', 'wb'))
+    'vocabulary': vocabulary,
+    'START': START,
+    'END': END,
+    'UNK': UNK,
+    'PAD': PAD
+}, open('argument.dat', 'wb'), protocol=2)
 
-batch_size = 256
-embedding_size = 256
-rnn_size = 256
-model_output = 256
+batch_size = 64
+embedding_size = 512
+rnn_size = 512
+model_output = 512
 samples_per_epoch = int(train_words_size / batch_size + 1) * batch_size
 file_name_caption_list = list(file_name_caption.items())
 file_name_caption_list = sorted(file_name_caption_list, key=lambda x: x[0])
