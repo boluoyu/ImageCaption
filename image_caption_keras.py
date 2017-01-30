@@ -23,7 +23,7 @@ from tqdm import tqdm
 from keras.models import Sequential
 from keras.layers import Embedding, GRU, LSTM, TimeDistributed, RepeatVector, Merge
 from keras.layers import Dense, Activation, Dropout
-from keras.optimizers import Nadam
+from keras.optimizers import Nadam, SGD, RMSprop, Adam
 from sklearn.utils import shuffle
 
 # Download tokenizer models if needed
@@ -47,7 +47,7 @@ END = '<end>'
 UNK = '<unk>'
 PAD = '<pad>'
 
-min_count = 3
+min_count = 2
 max_len = 0
 train_words_size = 0
 vocabulary = Counter()
@@ -82,10 +82,10 @@ pickle.dump({
     'PAD': PAD
 }, open('argument.dat', 'wb'), protocol=2)
 
-batch_size = 64
-embedding_size = 512
-rnn_size = 512
-model_output = 512
+batch_size = 128
+embedding_size = 256
+rnn_size = 256
+model_output = 256
 samples_per_epoch = int(train_words_size / batch_size + 1) * batch_size
 file_name_caption_list = list(file_name_caption.items())
 file_name_caption_list = sorted(file_name_caption_list, key=lambda x: x[0])
@@ -107,7 +107,7 @@ model.add(LSTM(rnn_size, return_sequences=False))
 model.add(Dense(vocabulary_size))
 model.add(Activation('softmax'))
 
-optimizer = Nadam(lr=0.001, clipnorm=1., clipvalue=5.)
+optimizer = Adam(lr=0.001, clipnorm=5.)
 model.compile(
     loss='categorical_crossentropy',
     optimizer=optimizer,
@@ -173,7 +173,7 @@ for [x_img, x_lang], y in data_flow(file_name_caption_list, file_name_images, wo
 model.fit_generator(
     data_flow(file_name_caption_list, file_name_images, word_index, max_len, vocabulary_size, batch_size),
     samples_per_epoch=samples_per_epoch,
-    nb_epoch=10
+    nb_epoch=20
 )
 
 model.save('keras_image_caption_model.dat')
