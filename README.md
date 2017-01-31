@@ -18,6 +18,7 @@ coco_caption = '/home/qhduan/Downloads/COCO/annotations/captions_train2014.json'
 
 You could open *preview.ipynb* to view the train result and test result.
 
+```
 qhduan@qhduan-memect:~/Downloads/COCO$ ve/bin/python image_caption_keras.py
 Using Theano backend.
 Using gpu device 0: GeForce GTX 960M (CNMeM is disabled, cuDNN 5105)
@@ -81,3 +82,4 @@ Epoch 19/20
 935680/935680 [==============================] - 2640s - loss: 2.1760 - acc: 0.5039     
 Epoch 20/20
 935680/935680 [==============================] - 2619s - loss: 2.1618 - acc: 0.5055
+```
