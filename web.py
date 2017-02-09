@@ -11,6 +11,7 @@ import base64
 import pickle
 from io import BytesIO
 
+os.environ['KERAS_BACKEND'] = 'theano'
 os.environ['THEANO_FLAGS'] = 'floatX=float32,device=cpu'
 IMAGE_PATTERN =  pattern = re.compile(
     '^.*\.(png|jpeg|gif|bmp|jpg)$',
