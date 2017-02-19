@@ -16,11 +16,11 @@ from scipy.misc import imresize
 from tqdm import tqdm
 from vgg16 import VGG_16
 
-vgg_model_weights = '/home/qhduan/Downloads/COCO/vgg16_weights.h5'
-coco_train = '/home/qhduan/Downloads/COCO/train2014'
-coco_train_caption = '/home/qhduan/Downloads/COCO/annotations/captions_train2014.json'
-coco_val = '/home/qhduan/Downloads/COCO/val2014'
-coco_val_caption = '/home/qhduan/Downloads/COCO/annotations/captions_val2014.json'
+vgg_model_weights = '/home/qhduan/Downloads/imagedata/vgg16_weights.h5'
+coco_train = '/home/qhduan/Downloads/imagedata/train2014'
+coco_train_caption = '/home/qhduan/Downloads/imagedata/annotations/captions_train2014.json'
+coco_val = '/home/qhduan/Downloads/imagedata/val2014'
+coco_val_caption = '/home/qhduan/Downloads/imagedata/annotations/captions_val2014.json'
 
 def get_file_name_caption(coco_caption):
     captions = json.load(open(coco_caption, 'r'))
@@ -54,7 +54,7 @@ vgg_model.outputs = [vgg_model.layers[-1].output]
 vgg_model.layers[-1].outbound_nodes = []
 vgg_model.trainable = False
 
-batch_size = 16
+batch_size = 64
 
 file_name_images = {}
 X = []

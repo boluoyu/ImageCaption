@@ -14,6 +14,9 @@ import json
 import pickle
 from collections import OrderedDict, Counter
 
+# os.environ['KERAS_BACKEND'] = 'tensorflow'
+os.environ['KERAS_BACKEND'] = 'theano'
+
 import nltk
 from nltk.tokenize import word_tokenize
 from PIL import Image
@@ -22,7 +25,7 @@ import numpy as np
 from tqdm import tqdm
 from keras.models import Sequential
 from keras.layers import Embedding, GRU, LSTM, TimeDistributed, RepeatVector, Merge
-from keras.layers import Dense, Activation, Dropout
+from keras.layers import Dense, Activation, Dropout, Bidirectional
 from keras.optimizers import Nadam, SGD, RMSprop, Adam
 from sklearn.utils import shuffle
 
@@ -82,10 +85,8 @@ pickle.dump({
     'PAD': PAD
 }, open('argument.dat', 'wb'), protocol=2)
 
-batch_size = 128
+batch_size = 256
 embedding_size = 256
-rnn_size = 256
-model_output = 256
 samples_per_epoch = int(train_words_size / batch_size + 1) * batch_size
 file_name_caption_list = list(file_name_caption.items())
 file_name_caption_list = sorted(file_name_caption_list, key=lambda x: x[0])
@@ -93,21 +94,23 @@ file_name_caption_list = shuffle(file_name_caption_list, random_state=0)
 
 # Image model
 image_model = Sequential()
-image_model.add(Dense(model_output, activation='relu', input_shape=(4096,)))
-image_model.add(RepeatVector(max_len))
+image_model.add(Dense(256, activation='relu', input_shape=(4096,)))
+image_model.add(RepeatVector(1))
 
 language_model = Sequential()
 language_model.add(Embedding(vocabulary_size, embedding_size, input_length=max_len))
-language_model.add(LSTM(rnn_size, return_sequences=True))
-language_model.add(TimeDistributed(Dense(model_output)))
+language_model.add(LSTM(256, return_sequences=True))
+language_model.add(TimeDistributed(Dense(256)))
 
 model = Sequential()
 model.add(Merge([image_model, language_model], mode='concat', concat_axis=1))
-model.add(LSTM(rnn_size, return_sequences=False))
+model.add(Bidirectional(LSTM(256, return_sequences=False)))
 model.add(Dense(vocabulary_size))
 model.add(Activation('softmax'))
 
 optimizer = Adam(lr=0.001, clipnorm=5.)
+# optimizer = Adam(lr=0.001, clipvalue=0.5)
+# optimizer = Adam(lr=0.001)
 model.compile(
     loss='categorical_crossentropy',
     optimizer=optimizer,
